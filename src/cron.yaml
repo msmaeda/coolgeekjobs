@@ -1,0 +1,10 @@
+cron:
+- description: crawl sites for job postings
+  url: /update/jobs
+  schedule: every 30 minutes from 08:00 to 22:00
+  timezone: America/New_York
+  
+- description: refresh crawl site listings
+  url: /update/joburls
+  schedule: every day 07:00
+  timezone: America/New_York

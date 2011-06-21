@@ -1,0 +1,152 @@
+body {
+	font-family: arial, sans-serif;
+	background-image:url('/images/background.png');
+	background-repeat:repeat-x;
+}
+
+#palette {
+	background-color: white;
+}
+
+hr {
+	height: .5em;
+}
+
+.posting {
+	padding-bottom: 3em;
+}
+
+.padding {
+	padding: 1em;
+}
+
+.heading {
+	letter-spacing: -2px;
+	color: #25383C;
+	font-weight: 650;
+	font-size: 28pt;
+}
+
+.heading_skills {
+	letter-spacing: -2px;
+	color: #25383C;
+	font-weight: 650;
+}
+
+.filters {
+	letter-spacing: -1px;
+	color: #25383C;
+	font-weight: 700;
+}
+
+.jtitle {
+	font-size: 22pt;
+	letter-spacing:-2px;	
+}
+
+.jtitle a {
+	color: #25587E;
+	//color: #4C787E;
+}
+
+.jtitle a:hover {
+	color: black;
+}
+
+.jtimefound {
+	color: #B4CFEC;
+}
+
+.jdesc {
+	padding-top: 1em;	
+}
+
+.jtags {
+	font-size: 13pt;
+	padding-top: 1em;
+	color: #25587E;
+	letter-spacing:-1px;
+}
+
+.jtags a {
+	background-color: #EEE;
+	margin-right: .5em;
+	padding: .1em .2em;
+	color: black;
+}
+
+.logo {
+	height: 75px;
+	width: 74px;
+}
+
+.bottom {
+	margin-top: 3em;
+}
+
+.sidebar_second {
+	margin-top: 40em;
+}
+
+#navbar {
+	list-style-type: none;
+	margin: auto;
+	padding-bottom: 2em;
+}
+
+#navbar li {
+	float: left;
+}
+
+#navskills a {
+	font-size: 16pt;
+}
+
+#filters {
+	list-style-type: none;
+	margin: auto;
+}
+
+#filters li {
+	float: left;
+}
+
+#hot {
+	background: transparent url(/images/flame.jpg) no-repeat fixed;
+}
+
+#hot font {
+	color: #FF0000;
+}
+
+#stats {
+	list-style-type: none;
+	margin: auto;
+	padding-bottom: 2em;
+}
+
+#stats li {
+	float: left;
+}
+
+.stats a {
+	font-size: 18pt;
+	color: #25587E;
+}
+
+ul a {
+	padding: .5em;	
+}
+
+#error {
+	color: red;
+	font-weight: bold;
+}
+
+.header {
+	font-weight: bold;
+}
+
+a {
+	text-decoration: none;
+}

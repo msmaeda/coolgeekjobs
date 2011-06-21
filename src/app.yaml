@@ -1,0 +1,54 @@
+# Copyright 2010.  BSpoke, LLC.
+
+# AppEngine App Configuration for Cool Geek Jobs
+
+application: coolgeekjobs
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /remote
+  script: $PYTHON_LIB/google/appengine/ext/remote_api/handler.py
+  login: admin
+  
+- url: /update/jobs
+  script: app/updatejob.py
+  login: admin
+  
+- url: /update/joburls
+  script: app/updatejob.py
+  login: admin
+
+- url: /images
+  static_dir: images
+   
+- url: /js
+  static_dir: js
+  
+- url: /stylesheets
+  static_dir: stylesheets
+
+- url: /
+  script: /web/jobreport.py
+    
+- url: /job(.*)
+  script: /web/jobreport.py
+  
+- url: /morejobs(.*)
+  script: /web/jobreport.py
+  
+skip_files:
+- |
+  ^(.*/)?( (app\.yaml)|
+  (app\.yml)|
+  (index\.yaml)|
+  (index\.yml)|
+  (#.*#)|
+  (.*~)|
+  (.*\.py[co])|
+  (.*/RCS/.*)|
+  (\..*)|
+  )$
+- .*/tests/.*
+- .*_test.py

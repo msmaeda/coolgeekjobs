@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Cool Geek Jobs - Recent Openings{% endblock %}
+
+{% block content %}
+<div class="span-16">
+  {% if not skilltype %}
+    <h2 class="heading">RECENT POSTINGS</h2>
+  {% else %}
+    <h2 class="heading">RECENT {{skilltype}} POSTINGS</h2>
+  {% endif %}
+  <hr id="top">
+  {% for job in jobs %}
+	<div class="posting">
+	  <div class="jtitle"><a href="/job/{{job.key}}">{{job.title}}</a></div>
+	  <div class="jtimefound">Found {{job.date|timesince}} ago</div>
+	  <div class="jdesc">{{job.short}} <a href="/job/{{job.key}}">[...]</a></div>
+	  <div class="jtags">
+	  	Tags  
+	    {% for tagdict in job.tags %}
+		  {% for tag in tagdict.items %}
+	        <a href="/morejobs/{{tag.1}}/0">{{tag.0}}</a>
+		  {% endfor %}
+	    {% endfor %}
+		{% if not job.tags %}
+		  None
+		{% endif %}
+      </div>
+	</div>
+  {% endfor %}
+  {% if not jobs %}
+    No Job Listings
+  {% endif %}
+</div>
+<div class="span-7 last">
+  <div class="sidebar">
+    <h3 class="filters">SKILL FILTERS</h3>
+    <ul id="filters">
+      {% for l in languages %}
+	    <li><a href="/morejobs/{{l.name}}/0"><img class="logo" src="/images/{{l.logo}}" alt="{{l.display}}" title="{{l.display}}"></a></li>
+	  {% endfor %}
+    </ul>
+  </div>
+  <div class="sidebar_second">
+    <h3 class="filters">JOB STATISTICS</h3>
+	<div class="stats">
+  	  <a href="/jobstats/all/30">Which Skills Are <span id="hot"></span><font color="#FF0000">HOT</FONT></span> (and which are not)</a>
+	</div>
+  </div>
+</div>
+<div class="span-16">
+  <div class="posting">
+  	<div class="nav">
+      {% if has_previous %}
+        <a href="/morejobs/{{filter}}/{{previous_offset}}">Prev</a> | 
+      {% endif %}
+      {% if has_more %}
+        <a href="/morejobs/{{filter}}/{{offset}}">Next</a>
+      {% endif %}
+	</div>
+</div>
+{% endblock %}
