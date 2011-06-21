@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Cool Geek Jobs - Administration{% endblock %}
+
+{% block content %}
+<div class="span-22">
+  {% if not skilltype %}
+    <h2 class="heading">Administration Page</h2>
+  {% else %}
+    <h2 class="heading">Job Listings</h2>
+  {% endif %}
+  <hr id="top">
+  {% for job in jobs %}
+	<div class="posting">
+	  <div class="jtitle">{{job.title}}</div>
+	  <div class="jdesc">{{job.short}} <a href="/_admincoolgeeks/viewjob/{{job.key}}">[...]</a></div>
+	  <div class="jtags">
+	  	Tags  
+	    {% for tagdict in job.tags %}
+		  {% for tag in tagdict.items %}
+	        {{tag.0}}
+		  {% endfor %}
+	    {% endfor %}
+		{% if not job.tags %}
+		  None
+		{% endif %}
+      </div>
+	  <div class="admin_actions">
+	  	<a href="/_admincoolgeeks/editjob/{{job.key}}">Edit Job</a> | <a href="/_admincoolgeeks/editjobtags/{{job.key}}">Edit Tags</a> | <a href="/_admincoolgeeks/deletejob/{{job.key}}">Delete Job</a>
+	  </div>
+	</div>
+  {% endfor %}
+  {% if not jobs %}
+    No Job Listings
+  {% endif %}
+</div>
+<div class="span-22">
+  <div class="posting">
+  	<div class="nav">
+      {% if has_previous %}
+        <a href="/morejobs/{{filter}}/{{previous_offset}}">Prev</a> | 
+      {% endif %}
+      {% if has_more %}
+        <a href="/morejobs/{{filter}}/{{offset}}">Next</a>
+      {% endif %}
+	</div>
+</div>
+{% endblock %}

@@ -36,10 +36,11 @@ class JobListingHandler(BasePage):
         """        
         current_offset  = 0
         
+        self.set_template('templates/index.html')
+        
         languages       = model.Languages.all()
         languages.order("display")
         
-        self.set_template('templates/index.html')
         self.add_template_value('languages', languages)
         
         jobs        = model.Job.all()

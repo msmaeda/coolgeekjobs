@@ -52,7 +52,8 @@ def _tag_jobs(description):
               'perl'        :'PERL',
               'erlang'      :'Erlang',
               'java'        :'Java',
-              'php'         :'PHP',
+              ' php'        :'PHP',
+              'php '        :'PHP',
               'objective c' :'Objective C',
               'objective-c' :'Objective C',
               'obj c'       :'Objective C',
@@ -63,7 +64,8 @@ def _tag_jobs(description):
               'android'     :'Android',
               "C\#"         :'C#',
               "C\+\+"       :'C++',
-              '\.net'       :'.NET',
+              ' \.net'      :'.NET',
+              '\.net '      :'.NET',
               'mysql'       :'MySQL',
               'oracle'      :'Oracle',
               ' lua '       :'Lua',
@@ -75,7 +77,8 @@ def _tag_jobs(description):
     
         for tag in tags.keys():
             if re.search(tag, description, re.IGNORECASE):
-                tag_info.append(tags[tag])
+                if tags[tag] not in tag_info:
+                    tag_info.append(tags[tag])
     
     return tag_info
     
