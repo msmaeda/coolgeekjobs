@@ -191,9 +191,20 @@ def _add_tags(tag_list):
             results = stats.fetch(1)
             
             if len(results) == 0:
-                stats   = model.Stats(statname      = tag,
-                                      occurrences    = 1)
-                stats.put()
+                
+                # First stat of the new day.  Need to initialize all stats for
+                # today for graphing purposes
+                
+                tags    = model.Tag.all()
+                for tag in tags:
+                    if tag.key().name() == tag:
+                        stats   = model.Stats(statname      = tag.key().name(),
+                                              occurrences   = 1)
+                        stats.put()
+                    else:
+                        stats   = model.Stats(statname      = tag.key().name(),
+                                              occurrences   = 0)
+                        stats.put()
                 
             else:
                 stat    = results[0]

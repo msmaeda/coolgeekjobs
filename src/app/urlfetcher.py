@@ -69,7 +69,7 @@ def _tag_jobs(description):
               'mysql'       :'MySQL',
               'oracle'      :'Oracle',
               ' lua '       :'Lua',
-              'redis'       :'Redis'}
+              'scala '      :'Scala'}
     
     tag_info    = []
     

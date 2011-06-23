@@ -106,11 +106,15 @@ class JobListingHandler(BasePage):
             self.add_template_value('has_previous', True)
             self.add_template_value('filter',filter)
             self.add_template_value('previous_offset',(current_offset - MAX_ITEMS))
+        else:
+            self.add_template_value('has_previous', False)
             
         if has_more:
             self.add_template_value('has_more', True)
             self.add_template_value('filter',filter)
-            self.add_template_value('offset',(current_offset + MAX_ITEMS))        
+            self.add_template_value('offset',(current_offset + MAX_ITEMS))
+        else:
+            self.add_template_value('has_more', False)        
                  
         self.add_template_value('jobs',records)
         
@@ -197,6 +201,7 @@ class StatHandler(BasePage):
         self.add_template_value('skillname', stat)    
         self.add_template_value('range', range)
         
+        stats.filter("date >=", '2011-06-21')
         stats.order('date')
         stats.order('statname')
         
@@ -267,6 +272,10 @@ class StatHandler(BasePage):
         chart_callback  = chart_callback + "&chxl=0:" + xaxis
         chart_callback  = chart_callback + "&chdl=" + languages
         chart_callback  = chart_callback + "&chco=" + colors
+        
+        # X,Y axis
+        chart_callback  = chart_callback + "&chxt=y"
+        chart_callback  = chart_callback + "&chx1=0:|0|10|20|30"
                 
         logging.info(chart_callback)
         self.add_template_value('stats', chart_callback)
