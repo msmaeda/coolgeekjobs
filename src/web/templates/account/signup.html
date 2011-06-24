@@ -58,7 +58,7 @@
 	$('#username').blur(function() {
 		if (this.value != '') {
 			tmpValue	= this.value;
-			$.getJSON("http://localhost:8080/account/validatedusername/" + tmpValue, 
+			$.getJSON("http://www.coolgeekjobs.com/account/json/validateusername/" + tmpValue, 
 				function(data) {
 	  				$.each(data, function(key, val) {
 						if (key == 'available') {
@@ -73,19 +73,46 @@
 				});			
 		}
 	});
-	
+
+	$('#email').focus(function() {
+		$('#email_err').remove();
+	})
+	$('#email').blur(function() {
+		if (this.value != '') {
+			tmpValue	= this.value;
+			encodedVal	= tmpValue.replace("@", "%40")
+			$.getJSON("http://www.coolgeekjobs.com/account/json/validateemail/" + encodedVal, 
+				function(data) {
+	  				$.each(data, function(key, val) {
+						if (key == 'available') {
+							if (val == 'No') {
+								$("input#email").after('<p id="email_err">"' + tmpValue + '" already in use</p>');
+								$('#email').val('');
+							} else {
+								$('#email_err').remove();
+							}
+						}
+	  				});
+				});			
+		}
+	});	
 </script>
 <script type="text/javascript"> 
-	var field1 = new LiveValidation( 'username', {onlyOnSubmit: true} );
-	field1.add( Validate.Presence, { minimum: 4, validMessage: "OK", failureMessage: "Required"} );
-	var field2 = new LiveValidation( 'password', {onlyOnSubmit: true} );
-	field2.add( Validate.Presence, { minimum: 4, validMessage: "OK", failureMessage: "Required"} );
-	var field3 = new LiveValidation( 'email', {onlyOnSubmit: true } );
+	var field1 = new LiveValidation( 'username', {onlyOnSubmit: true, validMessage: "OK"} );
+	field1.add( Validate.Presence, { minimum: 4, failureMessage: "Required"} );
+	var field2 = new LiveValidation( 'password', {onlyOnSubmit: true, validMessage: "OK"} );
+	field2.add( Validate.Presence, { minimum: 4, failureMessage: "Required"} );
+	var field3 = new LiveValidation( 'email', {onlyOnSubmit: true, validMessage: "OK" } );
+	field3.add( Validate.Presence, { minimum: 4, failureMessage: "Required"} );
 	field3.add( Validate.Email, { validMessage: "OK", failureMessage: "Invalid Email"} );
 	
 	var automaticOnSubmit = field1.form.onsubmit;          
 	field1.form.onsubmit = function(){	          
 		var valid = automaticOnSubmit();
+		
+		if (valid == false) {
+			return false;
+		}
 	}	          
 </script>  
 {% endblock %}

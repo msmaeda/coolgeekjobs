@@ -4,6 +4,11 @@ body {
 	background-repeat:repeat-x;
 }
 
+.mainbody {
+	min-height:800px;
+	height:auto !important;
+}
+
 #message {
 	font-size: 18pt;
 	color:#FF0000;
@@ -46,7 +51,7 @@ input {
 	-moz-border-radius: 5px; 
 	border-radius: 5px;
 	font-size: 14pt;
-	vertical-align: top; 
+	vertical-align: top;
 }
 
 .hint {

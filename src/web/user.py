@@ -99,7 +99,7 @@ class UserSubmitHandler(BasePage):
             encrypt = b64encode(m1.digest())            
             logging.info(encrypt)
             
-            conf_key    = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(12))
+            conf_key    = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(20))
             
             user    = User(username   = username,
                            password   = encrypt,
@@ -111,8 +111,8 @@ class UserSubmitHandler(BasePage):
                            plan_date  = datetime.datetime.now())
             user.put()
             
-            confirm_url     = "http://coolgeekjobs.appspot.com/account/confirm/" + conf_key
-            sender_address  = "Cool Geek Jobs Alerts <no-reply@coolgeekjobs.com>"
+            confirm_url     = "http://www.coolgeekjobs.com/account/confirm/" + conf_key
+            sender_address  = "Cool Geek Jobs Alerts <msmaeda@gmail.com>"
             subject         = "Please confirm your registration"
             body            = """
 Thank you for creating an account!  Please confirm your email address by
@@ -164,22 +164,37 @@ class UserJsonHandler(BasePage):
         self._json_decoder = simplejson.JSONDecoder()
         self._encode_response = simplejson.JSONEncoder().encode
 
-    def get(self, username=''):
+    def get(self, action = '', argument=''):
         """ Validate if username is available"""
-        logging.info("Query for " + username)
-        user    = User.all()
-        user.filter("username =", username)
-        
         res = dict(status=STATUS_OK)
         
-        res['available']    = 'No'
+        if action == 'validateusername':
+            logging.info("Query for username" + argument)
+            
+            user    = User.all()
+            user.filter("username =", argument)
         
-        if user.count() == 0:
-            res['available'] = 'Yes'
+            res['available']    = 'No'
+        
+            if user.count() == 0:
+                res['available'] = 'Yes'
             
-        if username == 'test':
-            res['available'] = 'No'
+            if argument == 'test':
+                res['available'] = 'No'
+        
+        elif action == 'validateemail':
+            email   = argument.replace("%40","@")
             
+            logging.info("Query for email" + email)
+            
+            user    = User.all()
+            user.filter("email =", email)
+        
+            res['available']    = 'No'
+        
+            if user.count() == 0:
+                res['available'] = 'Yes'
+                            
         self.response.headers['content-type'] = 'text/plain'
         self.response.out.truncate(0)
         self.response.out.write(self._encode_response(res))
@@ -190,7 +205,7 @@ def application():
 
     return webapp.WSGIApplication(
         [('/account/signup', UserHandler),         
-         ('/account/validatedusername/(.*)', UserJsonHandler),
+         ('/account/json/(.*)/(.*)', UserJsonHandler),
          ('/account/submit/(.*)/(.*)', UserSubmitHandler),
          ('/account/submit/(.*)', UserSubmitHandler),
          ('/account/login', UserHandler),
