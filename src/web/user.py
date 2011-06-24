@@ -27,6 +27,7 @@ STATUS_ERROR    = 'err'
 B64SALT = "kDPdraeewad0Py2QwEdJYtUX9cJABdfe3g=="
 B64HASH = "OJF6H4KdxFreas34arLgLu+oTDNFodCEfMA="
 BINSALT = b64decode(B64SALT)
+
 #from google.appengine.api import memcache
 #TODO: Add this in for queries to speed things up"""
 
@@ -39,7 +40,6 @@ class UserHandler(BasePage):
         super(UserHandler, self).__init__()
         
     def get(self, action='', account_key='', arg1=''):
-        logging.info("action is " + action + " key is " + account_key)
         """ Serve up user related pages."""
         if action == 'signup':
             self.set_template('templates/account/signup.html')
@@ -54,7 +54,7 @@ class UserHandler(BasePage):
             
             if user is None:
                 error   = "Could not locate your account information."
-                self.add_template_value('error', error)
+                self.error_message(error)
                 self.add_template_value('title', "Cool Geek Jobs - Ooops!!!")
             else:
                 u   = user[0]
@@ -64,9 +64,18 @@ class UserHandler(BasePage):
                 self.add_template_value('firstname', u.first.upper())
                 u.email_conf = True
                 u.put()
-        #elif action == 'login':
+        elif action == 'signin':
+            self.set_template('templates/account/signin.html')
+        elif action == 'edit':
+            session_id  = cgi.escape(self.request.get('session_id'))
+            user        = _check_logged_in(session_id)
             
-        #elif action == 'edit':
+            if user is None:
+                self.set_template('templates/account/signin.html')
+                self.error_message("SESSION EXPIRED")
+            else:
+                self.set_template('templates/account/useraccount.html')
+                self.add_template_value("session_id", user.session)
             
         else:
             self.set_template('templates/account/signup.html')
@@ -122,7 +131,6 @@ clicking on the link below:
 """ % confirm_url
 
             mail.send_mail(sender_address, email, subject, body)
-
             
             self.set_template('templates/account/signuppending.html')
             self.add_template_value('username', username.upper())
@@ -150,7 +158,52 @@ clicking on the link below:
                 
             self.add_template_value('planname', planname)
             self.add_template_value('planfreq', planfreq)
-        
+            
+        elif action == 'login':
+            username    = cgi.escape(self.request.get('username'))
+            password    = cgi.escape(self.request.get('password'))            
+            
+            user    = User.all()
+            user.filter("username =", username)
+            user.get()
+            
+            if user.count() == 0:
+                self.set_template('templates/account/signin.html')
+                self.error_message("USERNAME AND/OR PASSWORD INCORRECT")
+            
+            else:
+                u   = user[0]
+
+                m1 = hashlib.sha1()
+                
+                # Pass in salt
+                m1.update(BINSALT)
+                m1.update(password)
+                encrypt = b64encode(m1.digest())
+                
+                if encrypt != u.password:
+                    self.set_template('templates/account/signin.html')
+                    self.error_message("USERNAME AND/OR PASSWORD INCORRECT")
+                    
+                else:
+                    session_id  = ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(20))
+                    greeting    = ''    
+                    
+                    # Save login time
+                    u.last_login    = datetime.datetime.now()
+                    u.session       = session_id
+                    u.put()
+                        
+                    if u.first is not None:
+                        greeting    = u.first.upper()
+                    else:
+                        greeting    = u.username.upper()
+                    
+                    self.set_template('templates/account/useraccount.html')
+                    self.info_message("WELCOME BACK, " + greeting)
+                    self.add_template_value('session_id', session_id)
+                    self.add_template_value('links', _logged_in_menu(u.key().id()))
+                
         self.write_page()    
         
 class UserJsonHandler(BasePage):
@@ -199,18 +252,34 @@ class UserJsonHandler(BasePage):
         self.response.out.truncate(0)
         self.response.out.write(self._encode_response(res))
         self.response.out.write('\n')
-        
+
+def _check_logged_in(session_id):    
+    user    = User.all().filter("session =", session_id).get()
+    
+    if user is None:
+        return None
+    else:
+        return user[0]
+                
+def _logged_in_menu(userid):
+    links   = {""                                       : "Home",
+               "jobstats/all/30"                        : "Job Stats",
+               "account/tellafriend/" + str(userid)     : "Tell A Friend",
+               "account/edit/" + str(userid)            : "Settings"}
+    
+    return links
+                    
 def application():
     """Instantiate a report application object."""
 
     return webapp.WSGIApplication(
-        [('/account/signup', UserHandler),         
-         ('/account/json/(.*)/(.*)', UserJsonHandler),
+        [('/account/json/(.*)/(.*)', UserJsonHandler),
          ('/account/submit/(.*)/(.*)', UserSubmitHandler),
          ('/account/submit/(.*)', UserSubmitHandler),
          ('/account/login', UserHandler),
          ('/account/upgrade/(.*)/(.*)', UserHandler),
-         ('/account/(.*)/(.*)', UserHandler)],
+         ('/account/(.*)/(.*)', UserHandler),
+         ('/account/(.*)', UserHandler)],
         debug=True)
 
 def main():

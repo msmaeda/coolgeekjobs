@@ -5,6 +5,7 @@
 __author__ = 'Matt Maeda <msmaeda@gmail.com>'
 
 import os
+import cgi
 
 from google.appengine.api import users
 from google.appengine.ext import webapp
@@ -20,7 +21,7 @@ class BasePage(webapp.RequestHandler):
     def __init__(self):
         """ Create a new handler.
         """
-        super(webapp.RequestHandler, self).__init__()
+        super(webapp.RequestHandler, self).__init__()        
 
     def set_template(self, full_path):
         """Sets template used when printing out page
@@ -31,6 +32,9 @@ class BasePage(webapp.RequestHandler):
         """
         self.template_full_path     = os.path.join(os.path.dirname(__file__),
                                                    full_path)
+        
+        # Set default template values used in all templates
+        _set_default_template_values(self)
 
     def add_template_value(self, k, v):
         """ Set template value
@@ -38,6 +42,13 @@ class BasePage(webapp.RequestHandler):
             * v template variable value
         """
         self.template_values[k]     = v
+    
+    
+    def info_message(self, message):
+        """ Sets page info message.
+            * message string
+        """
+        self.add_template_value('info_message', message)
 
     def error_message(self, error_message):
         """ Sets page error message.
@@ -50,8 +61,6 @@ class BasePage(webapp.RequestHandler):
             If template is not set, prints out base template
             with an error message
         """
-        # Set default template values used in all templates
-        _set_default_template_values(self)
 
         # In case template is not set
         if self.template_full_path == '':
@@ -62,6 +71,12 @@ class BasePage(webapp.RequestHandler):
         self.response.out.write(template.render(self.template_full_path,
                                                 self.template_values,
                                                 True))
+        
+    def _get_session_id(self):
+        return cgi.escape(self.request.get('session_id'))
+
+    def _set_session_id(self, session_id):
+        self.template_values.update({'session_id'   : session_id})
 
 def _get_greeting(self):
     """ Gets user information and if not logged in, redirects user to login.
@@ -76,7 +91,7 @@ def _get_greeting(self):
     #TODO: Add login/signin option
         
     #else:
-    #    self.redirect(users.create_login_url(self.request.uri))
+    #    self.redirect(users.create_login_url(self.request.uri))   
 
 def _menu_links():
     """ Maintain report menu list here
@@ -84,10 +99,14 @@ def _menu_links():
     
     return {""              : "HOME",}
 
+def _update_menu_links(self, links):    
+    self.template_values.update({'links'         : links})
+    
+
 def _set_default_template_values(self):
     """ Set default template values
     """
     self.template_values.update({'logout_url'   : _get_greeting(self)})
     self.template_values.update({'links'        : _menu_links()})
-    self.template_values.update({'message'      : ''})
+    self.template_values.update({'info_message' : ''})
     self.template_values.update({'error_message': ''})

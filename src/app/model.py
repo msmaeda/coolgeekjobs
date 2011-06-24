@@ -41,6 +41,8 @@ class User(db.Model):
                                                                 'weekly']))    
     plan_date   = db.DateTimeProperty(required=True)    
     want_email  = db.BooleanProperty(required=True, default=True)
+    last_login  = db.DateTimeProperty(required=False)
+    session     = db.StringProperty(required=False)
     
 class Crawler(db.Model):
     """Stores crawler information"""

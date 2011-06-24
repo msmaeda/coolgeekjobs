@@ -17,6 +17,7 @@
 </head>
 
 <body>
+  <input type="hidden" name="session_id" value="{{session_id}}">
   <div class="container">
     <div id="palette" class="span-24 last">
       <div id="head" class="span-24 last">
@@ -29,11 +30,13 @@
 		    </ul>
 		  </div>
 		</div>
-		<div id="message" class="span-24 last">{{message}}</div>
+		
       </div>
 	  <div class="span-24 last mainbody">
 	  	<div class="padding">
-          {% block content %}{% endblock %}
+	  		<div id="message" class="span-24 last">{{info_message}}</div>
+			<div id="err_message" class="span-24 last">{{error_message}}</div>
+          	{% block content %}{% endblock %}
 		</div>
 	  </div>
 	</div>

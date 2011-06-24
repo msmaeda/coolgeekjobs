@@ -9,7 +9,6 @@ import re
 import logging
 import datetime
 
-
 from web.base import BasePage
 from google.appengine.ext import webapp
 from google.appengine.ext.webapp.util import run_wsgi_app
@@ -332,7 +331,7 @@ class JsonHandler(BasePage):
             generate a tab-delimited file for download
         """
         logging.info("Starting JSON download")
-
+    
 
 def application():
     """Instantiate a report application object."""

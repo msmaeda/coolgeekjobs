@@ -36,9 +36,18 @@ handlers:
 
 - url: /
   script: /web/jobreport.py
+
+- url: /job/session/(.*)
+  script: /web/job.py
+
+- url: /user/session/(.*)
+  script: /web/user.py
     
 - url: /job(.*)
-  script: /web/jobreport.py
+  script: /web/job.py
+ 
+- url: /user(.*)
+  script: /web/user.py
   
 - url: /morejobs(.*)
   script: /web/jobreport.py

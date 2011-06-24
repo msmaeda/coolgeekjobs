@@ -10,8 +10,12 @@ body {
 }
 
 #message {
-	font-size: 18pt;
-	color:#FF0000;
+	font-size: 12pt;
+}
+
+#err_message {
+	font-size: 12pt;
+	color:#FF0000;	
 }
 
 #palette {
@@ -137,6 +141,15 @@ input {
 	list-style-type: none;
 	margin: auto;
 	padding-bottom: 2em;
+}
+
+#navbar a {
+	font-size: 13pt;
+	font-spacing: -1px;
+	font-weight: bold;
+	color: #25587E;
+	text-transform: uppercase;
+	
 }
 
 #navbar li {
