@@ -1,0 +1,91 @@
+{% extends "../base.html" %}
+
+{% block title %}Cool Geek Jobs - Sign Up{% endblock %}
+
+{% block content %}
+<div class="span-24">
+	<h2 class="heading">CREATE AN ACCOUNT</h2>
+	{% if errormsg %}
+	  <h2 class="errormsg">{{errormsg}}</h2>
+	{% endif %}
+</div>
+<form name="signup" action="/account/submit/new" method="post">
+	<div class="span-24">
+		<table>
+			<tr>
+				<td colspan="2"><h3 class="filters">User Information</h3></td>
+				<td colspan="2"><h3 class="filters">Plan</h3></td>
+			</tr>
+			<tr>
+				<tr>
+					<td class="legend" width="150px">USERNAME</td>
+					<td><input type="text" id="username" name="username"/><br><p class="hint">Required</p></td>
+					<td class="legend" width="350px">ONLY IF THE OPPORTUNITY IS RIGHT<br><p class="hint">Notifications Sent Once Per Week</p></td>
+					<td><input type="radio" name="plan" value="weekly" checked/></td>
+				</tr>
+				<tr>
+					<td class="legend">PASSWORD</td>
+					<td><input type="password" id="password" name="password"/><br><p class="hint">Required</p></td>
+					<td class="legend" width="350px">JUST TESTING THE WATERS<br><p class="hint">Notifications Sent Once Per Day</p></td>
+					<td><input type="radio" name="plan" value="daily"/></td>
+				</tr>
+				<tr>
+					<td class="legend">EMAIL</td>
+					<td><input type="text" id="email" name="email"/><br><p class="hint">Required</p></td>
+					<td class="legend" width="350px">READY TO MAKE THE LEAP<br><p class="hint">Notifications Sent Hourly</p></td>
+					<td><input type="radio" name="plan" value="hourly"/></td>
+				</tr>
+				<tr>
+					<td class="legend">FIRST NAME</td>
+					<td><input type="text" id="firstname" name="firstname"/></td>
+					<td class="legend" width="350px">GET ME OUTTA HERE!!!<br><p class="hint">Immediate Notification</p></td>
+					<td><input type="radio" name="plan" value="immediate"/></td>
+				</tr>
+				<tr>
+					<td class="legend">LAST NAME</td>
+					<td><input type="text" id="lastname" name="lastname"/></td>
+				</tr>				
+		</table>
+	</div>
+	<div class="center">
+		<input type="submit" class="submit" value="SUBMIT">
+	</div>
+</form>
+<script type="text/javascript">
+	$('#username').focus(function() {
+		$('#username_err').remove();
+	})
+	$('#username').blur(function() {
+		if (this.value != '') {
+			tmpValue	= this.value;
+			$.getJSON("http://localhost:8080/account/validatedusername/" + tmpValue, 
+				function(data) {
+	  				$.each(data, function(key, val) {
+						if (key == 'available') {
+							if (val == 'No') {
+								$("input#username").after('<p id="username_err">"' + tmpValue + '" is not available</p>');
+								$('#username').val('');
+							} else {
+								$('#username_err').remove();
+							}
+						}
+	  				});
+				});			
+		}
+	});
+	
+</script>
+<script type="text/javascript"> 
+	var field1 = new LiveValidation( 'username', {onlyOnSubmit: true} );
+	field1.add( Validate.Presence, { minimum: 4, validMessage: "OK", failureMessage: "Required"} );
+	var field2 = new LiveValidation( 'password', {onlyOnSubmit: true} );
+	field2.add( Validate.Presence, { minimum: 4, validMessage: "OK", failureMessage: "Required"} );
+	var field3 = new LiveValidation( 'email', {onlyOnSubmit: true } );
+	field3.add( Validate.Email, { validMessage: "OK", failureMessage: "Invalid Email"} );
+	
+	var automaticOnSubmit = field1.form.onsubmit;          
+	field1.form.onsubmit = function(){	          
+		var valid = automaticOnSubmit();
+	}	          
+</script>  
+{% endblock %}

@@ -42,7 +42,10 @@ handlers:
   
 - url: /morejobs(.*)
   script: /web/jobreport.py
-  
+
+- url: /account(.*)
+  script: web/user.py
+    
 - url: /_admincoolgeeks(.*)
   script: web/admin.py
   login: admin

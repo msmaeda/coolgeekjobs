@@ -1,0 +1,21 @@
+{% extends "../base.html" %}
+
+
+{% block title %}{{title}}{% endblock %}
+
+{% block content %}
+<div class="span-24">
+	{% if error %}
+		<h2 class="heading">OOOPS!!!</h2>
+		<p>This is embarassing!  We could not process your request.</p>
+	{% else %}
+		{% if firstname %}
+			<h2 class="heading">THANK YOU {{firstname}}!!!</h2>
+		{% else %}
+			<h2 class="heading">THANK YOU {{username}}!!!</h2>
+		{% endif %}
+	{% endif %}
+	<p>Your email has now been confirmed.  Good luck with your job search!</p>
+</div>
+  
+{% endblock %}

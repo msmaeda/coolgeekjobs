@@ -33,7 +33,7 @@ class AdminHandler(BasePage):
     def get(self, offset=''):
         """ Serve up base admin page.
         """
-        self.set_template('templates/admin.html')
+        self.set_template('templates/admin/admin.html')
 
         jobs        = model.Job.all()
         
@@ -121,7 +121,7 @@ class AdminKnownIssuesHandler(BasePage):
     def get(self):
         """ Serve up base admin page.
         """
-        self.set_template('templates/admin.html')
+        self.set_template('templates/admin/admin.html')
 
         jobs        = model.Job.all()
 
@@ -178,21 +178,21 @@ class AdminJobHandler(BasePage):
                'tags':          [jobreport._make_tags(tag) for tag in job.tag_info]}
         
         if action == 'deletejob':
-            self.set_template('templates/admindeletejob.html')
+            self.set_template('templates/admin/admindeletejob.html')
             self.add_template_value('jobid',jobid)
             self.add_template_value('job',j)
         elif action == 'deletejobconfirm':
             title   = job.title
             job.delete()
             
-            self.set_template('templates/admindeletejobconfirm.html')
+            self.set_template('templates/admin/admindeletejobconfirm.html')
             self.add_template_value('title',title)
         elif action == 'editjobtags':
-            self.set_template('templates/admineditjob.html')
+            self.set_template('templates/admin/admineditjob.html')
             self.add_template_value('jobid',jobid)
             self.add_template_value('job',j)
         elif action == 'removetag':
-            self.set_template('templates/admineditjob.html')
+            self.set_template('templates/admin/admineditjob.html')
             self.add_template_value('jobid',jobid)
             self.add_template_value('job',j)
             
@@ -238,7 +238,7 @@ class AdminTagHandler(BasePage):
                'tags':          [jobreport._make_tags(tag) for tag in newtaglist]}
                 
         
-        self.set_template('templates/admineditjob.html')
+        self.set_template('templates/admin/admineditjob.html')
         self.add_template_value('message', actualtag + " removed")
         self.add_template_value('jobid',jobid)
         

@@ -23,14 +23,24 @@ class Job(db.Model):
     
 class User(db.Model):
     """A user signed up to receive notifications."""
-    first       = db.StringProperty(required=True)
-    last        = db.StringProperty(required=True)
+    first       = db.StringProperty(required=False)
+    last        = db.StringProperty(required=False)
+    username    = db.StringProperty(required=True)
+    password    = db.StringProperty(required=True)
     email       = db.EmailProperty(required=True)
-    device_id   = db.StringProperty(required=False)
-    tag_types   = db.ListProperty(db.Key, default=None)
-    entry_type  = db.StringProperty(required=True, choices=set(['immediate',
+    conf_key    = db.StringProperty(required=True)
+    email_conf  = db.BooleanProperty(required=True, default=False)
+    entry_date  = db.DateTimeProperty(required=True, auto_now_add=True)
+    ios_dev_id  = db.StringProperty(required=False)
+    and_dev_id  = db.StringProperty(required=False)
+    mis_dev_id  = db.StringProperty(required=False)
+    tag_types   = db.StringListProperty(required=True, default=None)
+    plan_type   = db.StringProperty(required=True, choices=set(['immediate',
+                                                                'hourly',
                                                                 'daily',
-                                                                'weekly']))
+                                                                'weekly']))    
+    plan_date   = db.DateTimeProperty(required=True)    
+    want_email  = db.BooleanProperty(required=True, default=True)
     
 class Crawler(db.Model):
     """Stores crawler information"""

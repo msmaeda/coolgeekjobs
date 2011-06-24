@@ -1,0 +1,33 @@
+{% extends "../base.html" %}
+
+{% block title %}Cool Geek Jobs - Recent Openings{% endblock %}
+
+{% block content %}
+<div class="span-22">
+  {% if message %}
+    <h2>{{message}}</h2>
+  {% endif %}
+  <p>Confirm Delete?<a href="/_admincoolgeeks/deletejobconfirm/{{jobid}}">Yes</a> | <a href="/_admincoolgeeks">No</a></p> 
+  <h3 class="jtitle">{{job.title}}</h3>
+  <div class="posting">
+	<div class="jtimefound">Found {{job.entry_date|timesince}} ago</div>      
+	<div class="jlink"><a href="{{job.link}}" target="_blank">View Original Job Posting</a></div>
+	<div class="jdesc">{{job.desc}}</div>
+  </div>
+</div>
+<div class="span-22">
+  <div class="posting bottom">
+    <div class="jtags">
+	  Tags  
+	  {% for tagdict in job.tags %}
+		{% for tag in tagdict.items %}
+	      {{tag.0}} <a href="/_admincoolgeeks/removetag/{{jobid}}/{{tag.1}}">Remove Tag</a>
+		{% endfor %}
+	  {% endfor %}
+	  {% if not job.tags %}
+		None
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
