@@ -17,10 +17,6 @@ handlers:
   login: required
   auth_fail_action: unauthorized
   
-- url: /update/jobs
-  script: app/updatejob.py
-  login: admin
-  
 - url: /update/joburls
   script: app/updatejob.py
   login: admin
@@ -33,32 +29,26 @@ handlers:
   
 - url: /stylesheets
   static_dir: stylesheets
-
-- url: /
-  script: /web/jobreport.py
-
-- url: /job/session/(.*)
-  script: /web/job.py
-
-- url: /user/session/(.*)
-  script: /web/user.py
-    
-- url: /job(.*)
-  script: /web/job.py
- 
-- url: /user(.*)
-  script: /web/user.py
   
 - url: /morejobs(.*)
   script: /web/jobreport.py
 
+- url: /stats(.*)
+  script: /web/jobstats.py
+
+- url: /job(.*)
+  script: /web/jobreport.py
+      
 - url: /account(.*)
   script: web/user.py
     
 - url: /_admincoolgeeks(.*)
   script: web/admin.py
   login: admin
-    
+
+- url: /
+  script: /web/jobreport.py
+      
 skip_files:
 - |
   ^(.*/)?( (app\.yaml)|

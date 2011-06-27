@@ -12,7 +12,7 @@
   <h3 class="filters">SKILL FILTERS</h3>
   <ul id="filters">
     {% for l in languages %}
-	  <li><a href="/jobstats/{{l.name}}/{{range}}"><img class="logo" src="/images/{{l.logo}}" alt="{{l.display}}" title="{{l.display}}"></a></li>
+	  <li><a href="/stats/{{l.name}}/{{range}}"><img class="logo" src="/images/{{l.logo}}" alt="{{l.display}}" title="{{l.display}}"></a></li>
 	{% endfor %}
   </ul>
 </div>
@@ -20,12 +20,12 @@
   <div class="posting">
   	<div class="navskills">
   		<ul id="filters">
-  			<li><a href="/jobstats/{{skillname}}/30">MONTH</a></li>
-			<li><a href="/jobstats/{{skillname}}/90">QUARTER</a></li>
-			<li><a href="/jobstats/{{skillname}}/180">HALF-YEAR</a></li>
-			<li><a href="/jobstats/{{skillname}}/360">YEAR</a></li>
+  			<li><a href="/stats/{{skillname}}/30">MONTH</a></li>
+			<li><a href="/stats/{{skillname}}/90">QUARTER</a></li>
+			<li><a href="/stats/{{skillname}}/180">HALF-YEAR</a></li>
+			<li><a href="/stats/{{skillname}}/360">YEAR</a></li>
 			{% ifnotequal skill "ALL SKILLS"%}
-			  <li><a href="/jobstats/all/30">VIEW ALL SKILLS</a></li>
+			  <li><a href="/stats/all/30">VIEW ALL SKILLS</a></li>
 			{% endifnotequal %}
   		</ul>
 	</div>
